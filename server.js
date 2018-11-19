@@ -27,12 +27,23 @@ app.get("/api/hello", function (req, res) {
 
 //timestamp json api
 app.get("/api/timestamp/:date_string?", function(req, res) {
-    var time = new Date(req.params.date_string);
-    if (req.params.date_string === undefined) {
-      var time = new Date();
-    }
-    res.json({"unix": time.getTime(), "utc": time.toUTCString()});
-    console.log(typeof(time.getTime()));
+  let dateVal = req.params.date_string;
+  if (dateVal === undefined) {
+    let time = new Date();
+    var unixTime = time.getTime();
+    var utcTime = time.toUTCString();
+  }
+  else if(dateVal.indexOf("-") === -1) {
+    let time = new Date(Number(dateVal));
+    var unixTime = dateVal;
+    var utcTime = time.toUTCString();
+  }
+  else {
+    let time = new Date(dateVal);
+    var unixTime = time.getTime();
+    var utcTime = time.toUTCString();
+  }
+  res.json({unix: unixTime, utc: utcTime});
 });
 
 
